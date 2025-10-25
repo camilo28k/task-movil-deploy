@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: task_postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: crud_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - task_network
+
+  backend:
+    image: camilo28k/task-movil-api:latest
+    container_name: task_backend
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://task_postgres:5432/crud_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: admin
+    depends_on:
+      - postgres
+    networks:
+      - task_network
+
+  frontend:
+    image: camilo28k/task-movil-app:latest
+    container_name: task_frontend
+    ports:
+      - "8100:9000"
+    depends_on:
+      - backend
+    networks:
+      - task_network
+
+volumes:
+  postgres_data:
+
+networks:
+  task_network:
