@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_USER = 'haroldbg'
-        DOCKER_PASS = credentials('dockerhub-pass') // 👈 ID de tus credenciales en Jenkins
+        DOCKER_PASS = credentials('dockerhub-token') // 👈 ID de tus credenciales en Jenkins
     }
 
     stages {
